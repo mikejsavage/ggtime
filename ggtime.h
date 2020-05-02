@@ -22,22 +22,4 @@
 
 static constexpr uint64_t GGTIME_FLICKS_PER_SECOND = UINT64_C( 705600000 );
 
-struct Time { uint64_t flicks; };
-
-Time GetMonotonicTime();
-
-constexpr Time operator+( Time a, Time b ) { return { a.flicks + b.flicks }; }
-constexpr Time operator-( Time a, Time b ) { return { a.flicks - b.flicks }; }
-
-constexpr bool operator==( Time a, Time b ) { return a.flicks == b.flicks; }
-constexpr bool operator!=( Time a, Time b ) { return a.flicks != b.flicks; }
-constexpr bool operator<( Time a, Time b ) { return a.flicks < b.flicks; }
-constexpr bool operator<=( Time a, Time b ) { return a.flicks <= b.flicks; }
-constexpr bool operator>( Time a, Time b ) { return a.flicks > b.flicks; }
-constexpr bool operator>=( Time a, Time b ) { return a.flicks >= b.flicks; }
-
-constexpr Time FromMilliseconds( uint64_t ms ) { return { ms * GGTIME_FLICKS_PER_SECOND / 1000 }; }
-constexpr Time FromSeconds( uint64_t secs ) { return { secs * GGTIME_FLICKS_PER_SECOND }; }
-
-float ToSeconds( Time t );
-double ToSecondsDouble( Time t );
+uint64_t ggtime();

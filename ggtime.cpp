@@ -34,20 +34,24 @@
 
 #include "ggtime.h"
 
+static uint64_t to_flicks( uint64_t x, uint64_t xs_per_second ) {
+	uint64_t a = ( x / xs_per_second ) * GGTIME_FLICKS_PER_SECOND;
+	uint64_t b = ( ( x % xs_per_second ) * GGTIME_FLICKS_PER_SECOND ) / xs_per_second;
+	return a + b;
+}
+
 #if PLATFORM_WINDOWS
 
 #include <windows.h>
 
-Time GetMonotonicTime() {
+uint64_t ggtime() {
 	// https://docs.microsoft.com/en-us/windows/win32/api/profileapi/nf-profileapi-queryperformancecounter
 	// "On systems that run Windows XP or later, the function will always succeed and will thus never return zero."
 	LARGE_INTEGER now, freq;
 	QueryPerformanceCounter( &now );
 	QueryPerformanceFrequency( &freq );
 
-	uint64_t a = ( now.QuadPart / freq ) * GGTIME_FLICKS_PER_SECOND;
-	uint64_t b = ( ( now.QuadPart % freq ) * GGTIME_FLICKS_PER_SECOND ) / freq;
-	return { a + b };
+	return to_flicks( now.QuadPart, freq.QuadPart );
 }
 
 #elif PLATFORM_LINUX || PLATFORM_OPENBSD
@@ -56,25 +60,14 @@ Time GetMonotonicTime() {
 
 static constexpr uint64_t NS_PER_SECOND = UINT64_C( 1000000000 );
 
-Time GetMonotonicTime() {
+uint64_t ggtime() {
 	struct timespec ts;
 	clock_gettime( CLOCK_MONOTONIC, &ts );
 	uint64_t ns = ts.tv_sec * NS_PER_SECOND + ts.tv_nsec;
 
-	uint64_t a = ( ns / NS_PER_SECOND ) * GGTIME_FLICKS_PER_SECOND;
-	uint64_t b = ( ( ns % NS_PER_SECOND ) * GGTIME_FLICKS_PER_SECOND ) / NS_PER_SECOND;
-	return { a + b };
+	return to_flicks( ns, NS_PER_SECOND );
 }
 
 #else
 #error new platform
 #endif
-
-float ToSeconds( Time t ) {
-	assert( t.flicks < 3600 * GGTIME_FLICKS_PER_SECOND );
-	return t.flicks / float( GGTIME_FLICKS_PER_SECOND );
-}
-
-double ToSecondsDouble( Time t ) {
-	return t.flicks / double( GGTIME_FLICKS_PER_SECOND );
-}

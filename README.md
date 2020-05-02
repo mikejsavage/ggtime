@@ -7,16 +7,28 @@ ggtime supports Windows, Linux and OpenBSD.
 
 ## Usage
 
-ggtime only has a few functions, which can be found in the header. Basic
-usage looks like this:
+ggtime only has one function:
+
+```cpp
+uint64_t ggtime();
+```
+
+which returns a monotonic number of flicks since some arbitrary
+reference time.
+
+Basic usage looks like this:
 
 ```cpp
 #include <stdio.h>
+#include <stdint.h>
 #include "ggtime.h"
 
+uint64_t FromMilliseconds( uint64_t ms ) { return { ms * GGTIME_FLICKS_PER_SECOND / 1000 }; }
+float ToSeconds( uint64_t flicks ) { return flicks / float( GGTIME_FLICKS_PER_SECOND ); }
+
 int main() {
-	Time before = GetMonotonicTime();
-	Time after = GetMonotonicTime();
+	uint64_t before = ggtime();
+	uint64_t after = ggtime();
 
 	printf( "%f\n", ToSeconds( after - before ) );
 	printf( "%f\n", ToSeconds( FromMilliseconds( 50 ) ) );
