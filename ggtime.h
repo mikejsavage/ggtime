@@ -29,6 +29,13 @@ Time GetMonotonicTime();
 constexpr Time operator+( Time a, Time b ) { return { a.flicks + b.flicks }; }
 constexpr Time operator-( Time a, Time b ) { return { a.flicks - b.flicks }; }
 
+constexpr bool operator==( Time a, Time b ) { return a.flicks == b.flicks; }
+constexpr bool operator!=( Time a, Time b ) { return a.flicks != b.flicks; }
+constexpr bool operator<( Time a, Time b ) { return a.flicks < b.flicks; }
+constexpr bool operator<=( Time a, Time b ) { return a.flicks <= b.flicks; }
+constexpr bool operator>( Time a, Time b ) { return a.flicks > b.flicks; }
+constexpr bool operator>=( Time a, Time b ) { return a.flicks >= b.flicks; }
+
 constexpr Time FromMilliseconds( uint64_t ms ) { return { ms * GGTIME_FLICKS_PER_SECOND / 1000 }; }
 constexpr Time FromSeconds( uint64_t secs ) { return { secs * GGTIME_FLICKS_PER_SECOND }; }
 
