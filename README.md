@@ -1,7 +1,10 @@
 # ggtime
 
-ggtime is a fixed point timestamp library for C++. It supports Windows,
-Linux and OpenBSD.
+ggtime is a fixed point timestamp library for C++. It has near
+nanosecond precision and nicely divides FPS values that are common in
+games.
+
+It supports Windows, Linux and OpenBSD.
 
 
 ## Usage
