@@ -42,10 +42,7 @@ static uint64_t to_flicks( uint64_t x, uint64_t xs_per_second ) {
 
 #if PLATFORM_WINDOWS
 
-#ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
-#endif
-
 #include <windows.h>
 
 uint64_t ggtime() {
